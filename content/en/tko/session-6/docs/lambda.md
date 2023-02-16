@@ -380,7 +380,7 @@ diff ~/o11y-lambda-lab/auto/serverless.yml ~/o11y-lambda-lab/manual/serverless.y
 ```
 {{% /tab %}}
 {{% tab name="Expected Output" %}}
-``` text```
+``` text
 19c19
 < #======================================    
 ---
