@@ -415,6 +415,7 @@ const otelcore = require('@opentelemetry/core');
 We are using <https://www.npmjs.com/package/@opentelemetry/api> to manipulate the tracing logic in our functions.
 We are using <https://www.npmjs.com/package/@opentelemetry/core> to access the **Propagator** objects that we will use to manually propagate our context with.
 
+### Inject Trace Context in Producer Function
 The bellow code executes the following steps inside the Producer function:
 
 1. Get the current Active Span.
@@ -425,17 +426,18 @@ The bellow code executes the following steps inside the Producer function:
 
 ``` text
 const activeSpan = otelapi.trace.getSpan(otelapi.context.active());
-        const propagator = new otelcore.W3CTraceContextPropagator();
-        let carrier = {};
-        propagator.inject(otelapi.trace.setSpanContext(otelapi.ROOT_CONTEXT, activeSpan.spanContext()),
-                carrier,
+const propagator = new otelcore.W3CTraceContextPropagator();
+let carrier = {};
+propagator.inject(otelapi.trace.setSpanContext(otelapi.ROOT_CONTEXT, activeSpan.spanContext()),
+                 carrier,
                 otelapi.defaultTextMapSetter
         );
-        const data = "{\"tracecontext\": " + JSON.stringify(carrier) + ", \"record\":" + event.body + "}";
-        console.log(`Record with Trace Context added: 
-                     ${data}`);
+const data = "{\"tracecontext\": " + JSON.stringify(carrier) + ", \"record\":" + event.body + "}";
+console.log(`Record with Trace Context added: 
+             ${data}`);
 ```
 
+### Extract Trace Context in Consumer Function
 The bellow code executes the following steps inside the Consumer function:
 
 1. Extract the context that we obtained from the Producer into a carrier object.
@@ -447,21 +449,21 @@ The bellow code executes the following steps inside the Consumer function:
 
 ``` text
 const carrier = JSON.parse( message ).tracecontext;
-                        const propagator = new otelcore.W3CTraceContextPropagator();
-                        const parentContext = propagator.extract(otelapi.ROOT_CONTEXT, carrier, otelapi.defaultTextMapGetter);
-                        const tracer = otelapi.trace.getTracer(process.env.OTEL_SERVICE_NAME);
-                        const span = tracer.startSpan("Kinesis.getRecord", undefined, parentContext);
+const propagator = new otelcore.W3CTraceContextPropagator();
+const parentContext = propagator.extract(otelapi.ROOT_CONTEXT, carrier, otelapi.defaultTextMapGetter);
+const tracer = otelapi.trace.getTracer(process.env.OTEL_SERVICE_NAME);
+const span = tracer.startSpan("Kinesis.getRecord", undefined, parentContext);
                          
-                        span.setAttribute("span.kind", "server");
-                        const body = JSON.parse( message ).record;
-                        if (body.name) {
-                                span.setAttribute("custom.tag.name", body.name);
-                        }
-                        if (body.superpower) {
-                                span.setAttribute("custom.tag.superpower", body.superpower);
-                        }
+span.setAttribute("span.kind", "server");
+const body = JSON.parse( message ).record;
+if (body.name) {
+    span.setAttribute("custom.tag.name", body.name);
+}
+ if (body.superpower) {
+    span.setAttribute("custom.tag.superpower", body.superpower);
+}
   --- function does some work
-                        span.end();
+ span.end();
   ```
 
 Now let's see the difference this makes.
