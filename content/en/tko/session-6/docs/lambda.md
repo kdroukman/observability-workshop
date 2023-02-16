@@ -36,9 +36,11 @@ git clone https://github.com/kdroukman/o11y-lambda-lab.git
 ```
 {{% /notice %}}
 
-In your Splunk Observability Cloud lab Organisation (Org) obtain your Access Token and Realm Values.
+
 
 ### 1. Set Environment Variables
+
+In your Splunk Observability Cloud Organisation (Org) obtain your Access Token and Realm Values. 
 
 Please reset your environment variables from the earlier lab. Take care that for this lab we may be using different names - make sure to match the Environment Variable names bellow.
 
