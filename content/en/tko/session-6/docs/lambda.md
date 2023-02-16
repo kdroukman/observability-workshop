@@ -15,13 +15,13 @@ In this lab you will learn how a distributed trace is constructed for a small se
 
 You should already have the lab content available on your ec2 lab host. 
 
-Ensure that your working lab folder `o11y-lambda-lab` is on your home directory:
+Ensure that this lab's required folder `o11y-lambda-lab` is on your home directory:
 
 
 {{< tabs >}}
 {{% tab name="Command" %}}
 ``` bash
-ls
+cd ~ && ls
 ```
 {{% /tab %}}
 {{% tab name="Output" %}}
