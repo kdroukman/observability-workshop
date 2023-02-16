@@ -415,7 +415,7 @@ const otelcore = require('@opentelemetry/core');
 We are using <https://www.npmjs.com/package/@opentelemetry/api> to manipulate the tracing logic in our functions.
 We are using <https://www.npmjs.com/package/@opentelemetry/core> to access the **Propagator** objects that we will use to manually propagate our context with.
 
-### Inject Trace Context in Producer Function
+#### Inject Trace Context in Producer Function
 The bellow code executes the following steps inside the Producer function:
 
 1. Get the current Active Span.
@@ -437,7 +437,7 @@ console.log(`Record with Trace Context added:
              ${data}`);
 ```
 
-### Extract Trace Context in Consumer Function
+#### Extract Trace Context in Consumer Function
 The bellow code executes the following steps inside the Consumer function:
 
 1. Extract the context that we obtained from the Producer into a carrier object.
@@ -584,7 +584,7 @@ sls logs -f consumer
 
 Examine the logs carefully. Do you notice the difference?
 
-Note that we are logging our logging our Record together with the Trace context that we have added to it. Copy one of the underlined sub-sections of your trace parent context, and save it for later.
+Note that we are logging our Record together with the Trace context that we have added to it. Copy one of the underlined sub-sections of your trace parent context, and save it for later.
 
 ![image](https://user-images.githubusercontent.com/5187861/219372916-ed1afce5-176f-4baf-a9a3-0aae29e3f01b.png)
 
