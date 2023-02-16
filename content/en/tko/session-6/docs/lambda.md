@@ -9,8 +9,6 @@ This lab will make a tracing superhero out of you! In this lab you will learn ho
 ![image](https://user-images.githubusercontent.com/5187861/219358330-50022c0d-7882-47a3-a047-c4edda81de0d.png)
 
 
-We will be using Follow the steps bellow to set up and get started.
-
 ## Pre-Requisites
 
 You should already have the lab content available on your ec2 lab host. You will need to update custom settings to your environment. Please follow the steps bellow to achieve that.
