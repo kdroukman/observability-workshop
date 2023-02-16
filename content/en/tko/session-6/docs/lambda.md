@@ -30,7 +30,7 @@ o11y-lambda-lab
 {{< /tabs >}}
 
 {{% notice style="note" %}}
-If you don't see the directory, fetch the lab contents by running the following command:
+If you don't see it, fetch the lab contents by running the following command:
 ``` bash
 git clone https://github.com/kdroukman/o11y-lambda-lab.git
 ```
