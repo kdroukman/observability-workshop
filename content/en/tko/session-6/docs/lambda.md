@@ -4,7 +4,9 @@ linkTitle: Build a Distributed Trace
 weight: 99
 ---
 
-This lab will make a tracing superhero out of you! In this lab you will learn how a distributed trace is constructed for a small serverless application that runs on [AWS Lambda](https://aws.amazon.com/lambda/), producing and consuming your message via [AWS Kinesis](https://aws.amazon.com/kinesis/). 
+This lab will make a tracing superhero out of you! 
+
+In this lab you will learn how a distributed trace is constructed for a small serverless application that runs on [AWS Lambda](https://aws.amazon.com/lambda/), producing and consuming your message via [AWS Kinesis](https://aws.amazon.com/kinesis/). 
 
 ![image](https://user-images.githubusercontent.com/5187861/219358330-50022c0d-7882-47a3-a047-c4edda81de0d.png)
 
