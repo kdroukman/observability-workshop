@@ -13,7 +13,7 @@ In this lab you will learn how a distributed trace is constructed for a small se
 
 ## Pre-Requisites
 
-You should already have the lab content available on your ec2 lab host. You will need to update custom settings to your environment. Please follow the steps bellow to achieve that.
+You should already have the lab content available on your ec2 lab host. 
 
 Ensure that your working lab folder `o11y-lambda-lab` is on your home directory:
 
