@@ -1,114 +1,147 @@
 ---
-title: Observability Lambda Lab
-linkTitle: Observability Lambda Lab
+title: Build a Distributed Trace
+linkTitle: Build a Distributed Trace
 weight: 99
 ---
 
-Welcome to Observability Lambda Lab. This lab will make a tracing superhero out of you! Follow the steps bellow to set up and get started.
+This lab will make a tracing superhero out of you! In this lab you will learn how a distributed trace is constructed for a small serverless application that runs on [AWS Lambda](https://aws.amazon.com/lambda/), producing and consuming your message via [AWS Kinesis](https://aws.amazon.com/kinesis/). 
+
+![image](https://user-images.githubusercontent.com/5187861/219358330-50022c0d-7882-47a3-a047-c4edda81de0d.png)
+
+
+We will be using Follow the steps bellow to set up and get started.
 
 ## Pre-Requisites
 
 You should already have the lab content available on your ec2 lab host. You will need to update custom settings to your environment. Please follow the steps bellow to achieve that.
 
-Ensure that your working lab folder is on your home directory:
+Ensure that your working lab folder `o11y-lambda-lab` is on your home directory:
 
+
+{{< tabs >}}
+{{% tab name="Command" %}}
 ``` bash
 ls
 ```
+{{% /tab %}}
+{{% tab name="Output" %}}
+o11y-lambda-lab
+{{% /tab %}}
+{{< /tabs >}}
 
-Expected output:
-You should see the directory `o11y-lambda-lab` in the list.
-
-*Note:* If you don't see the directory, fetch the contents of this repository by running the following command:
-
+{{% notice style="note" %}}
+If you don't see the directory, fetch the lab contents by running the following command:
 ``` bash
-git clone -b master https://github.com/kdroukman/o11y-lambda-lab.git
+git clone https://github.com/kdroukman/o11y-lambda-lab.git
 ```
+{{% /notice %}}
 
 In your Splunk Observability Cloud lab Organisation (Org) obtain your Access Token and Realm Values.
 
 ### 1. Set Environment Variables
 
-Set the bellow environment variables:
+Please reset your environment variables from the earlier lab. Take care that for this lab we may be using different naming convension - make sure to match the Environment Variable name bellow.
 
+{{< tabs >}}
+{{% tab name="Export Environment Variables" %}}
 ``` bash
-export ACCESS_TOKEN=<CHANGE_ME> \
-export REALM=<CHANGE_ME> \
+export ACCESS_TOKEN=CHANGE_ME \
+export REALM=CHANGE_ME \
 export PREFIX=$(hostname)
 ```
+{{% /tab %}}
+{{< /tabs >}}
 
-### 2. Update Auto-instrumentation template
+### 2. Update Auto-instrumentation serverless template
 
-Update your auto-instrumentation Serverless template.
+Update your auto-instrumentation Serverless template to include new values from the Enviornment variables.
 
+{{< tabs >}}
+{{% tab name="Substitute Environment Variables" %}}
 ```bash
 cat ~/o11y-lambda-lab/auto/serverless_unset.yml | envsubst > ~/o11y-lambda-lab/auto/serverless.yml
 ```
+{{% /tab %}}
+{{< /tabs >}}
 
 Examine the output of the updated serverless.yml contents (you may need to scroll up to the relevant section).
 
+{{< tabs >}}
+{{% tab name="Check file contents" %}}
 ``` bash
 cat ~/o11y-lambda-lab/auto/serverless.yml
 ```
+{{% /tab %}}
+{{< /tabs >}}
 
 Locate the following section and confirm that the parameters have been set:
 ![image](https://user-images.githubusercontent.com/5187861/219005735-a494c35a-41c4-4350-930a-b9ce7e1f64ea.png)
 
-### 3. Update Manual-instrumentation template
+### 3. Update Manual instrumentation template
 
-Update your manual-instrumentation Serverless template.
+Update your manual instrumentation Serverless template to include new values from the Enviornment variables.
 
+{{< tabs >}}
+{{% tab name="Substitute Environment Variables" %}}
 ``` bash
 cat ~/o11y-lambda-lab/manual/serverless_unset.yml | envsubst > ~/o11y-lambda-lab/manual/serverless.yml
 ```
+{{% /tab %}}
+{{< /tabs >}}
 
 Examine the output of the updated serverless.yml contents (you may need to scroll up to the relevant section).
 
+{{< tabs >}}
+{{% tab name="Check file contents" %}}
 ``` bash
 cat ~/o11y-lambda-lab/manual/serverless.yml
 ```
+{{% /tab %}}
+{{< /tabs >}}
 
 Locate the following section and confirm that the parameters have been set:
 ![image](https://user-images.githubusercontent.com/5187861/219005735-a494c35a-41c4-4350-930a-b9ce7e1f64ea.png)
 
 ### 4. Set your AWS Credentials
 
-Add your credntials file and populate it with your provided AWS Access Key ID and AWS Secret Access Key values.
+You will be provided with AWS Access Key ID and AWS Secret Access Key values - substitue these values in place of `AWS_ACCESS_KEY_ID` and `AWS_ACCESS_KEY_SECRET` in the bellow command:
 
+{{< tabs >}}
+{{% tab name="Set AWS Credentials" %}}
 ``` bash
-mkdir ~/.aws & vi ~/.aws/credentials
+sls config credentials --provider aws --key AWS_ACCCESS_KEY_ID --secret AWS_ACCESS_KEY_SECRET
 ```
+{{% /tab %}}
+{{< /tabs >}}
 
-In `vi` editor paste the bellow and change to your Access Key values. (Hint: Hit letter `i` to set your Vi editor to Insert/Edit mode)
+This command will create a file `~/.aws/credentials` with your AWS Credentails populated. 
 
-``` text
-[default]
-aws_access_key_id=<CHANGE ME>
-aws_secret_access_key=<CHANGE ME>
-```
+Note that we are using `sls` here, which is a [Serverless](https://www.serverless.com/) framework for developing and deploying AWS Lambda functions. We will be using this command throughout this lab. 
 
-Save your `credentials` file:
-
-1. Hit `Esc` button to exit Insert mode in your Vi Editor
-2. Press column `:` - this will give you access to command prompt within your Vi Editor
-3. Key in `wq` and press `Enter`. This will write and quit your Vi Editor. i.e. Save.
-
-Now you are set up and ready for this Lab.
+Now you are set up and ready go!
 
 ## Auto-Instrumentation
 
 Navigate to the `auto` directory that contains auto-instrumentation code.
 
+{{< tabs >}}
+{{% tab name="Command" %}}
 ``` bash
 cd ~/o11y-lambda-lab/auto
 ```
+{{% /tab %}}
+{{< /tabs >}}
 
 Inspect the contents of the files in this directory.
 Take a look at the `serverless.yml` template.
 
+{{< tabs >}}
+{{% tab name="Command" %}}
 ``` bash
 cat serverless.yml
 ```
+{{% /tab %}}
+{{< /tabs >}}
 
 1. Can you identify which AWS entities are being created by this template?
 2. Can you identify where OpenTelemetry instrumentation is being set up?
@@ -123,32 +156,34 @@ You can see the relevant layer ARNs (Amazon Resource Name) and latest versions f
 You should also see in the Environment variables that are being set.
 ![image](https://user-images.githubusercontent.com/5187861/219012413-fddbea72-3f5a-418f-9f8f-83cf2305d976.png)
 
-Using the environment variables we are specifying to use the NodeJS function wrapper, since our Lambda is written in NodeJS. We are also providing APM service name and environment name, as well as Access token and Realm details.
-You should also see in the Environment variables that are being set. Using the environment variables we are specifying to use the NodeJS function wrapper, since our Lambda is written in NodeJS. We are also providing APM service name and environment name, as well as Access token and Realm details.
+Using the environment variables we are configuring and enriching our auto-instrumentation. Here we provide minimum information, such as NodeJS wrapper location in the Splunk APM Layer, environment name, service name, and our Splunk Org credentials. We are sending trace data directly to Splunk Observability Cloud. You could alternatively export traces to an OpenTelemetry Collector set up in [Gateway](https://opentelemetry.io/docs/collector/deployment/#gateway) mode. 
 
 Take a look at the function code.
 
+{{< tabs >}}
+{{% tab name="Command" %}}
 ``` bash
 cat handler.js
 ```
+{{% /tab %}}
+{{< /tabs >}}
 
-1. Can you identify the code for producer function?
-2. Can you identify the code for consumer function?
+1. Can you identify the code for **producer** function?
+2. Can you identify the code for **consumer** function?
 
-Note that there is no mention of Splunk or OpenTelemetry in the code. We are adding the instrumentation using the Lambda layer and Environment Variables only.
+Notice there is no mention of Splunk or OpenTelemetry in the code. We are adding the instrumentation using the Lambda layer and Environment Variables only.
 
 ### Deploy your Lambdas
 
 Run the following command to deploy your Lambda Functions:
 
+{{< tabs >}}
+{{% tab name="Deploy Command" %}}
 ``` bash
-serverless deploy
+sls deploy
 ```
-
-This command will follow the instructions in your `serverless.yml` template to create your Lambda functions and your Kinesis stream. Note it may take a couple of minutes to execute.
-
-Expected output:
-
+{{% /tab %}}
+{{% tab name="Expected Output" %}}
 ``` text
 Deploying hostname-lambda-lab to stage dev (us-east-1)
 ...
@@ -158,6 +193,11 @@ functions:
   producer: hostname-lambda-lab-dev-producer (1.6 kB)
   consumer: hostname-lambda-lab-dev-consumer (1.6 kB)
 ```
+{{% /tab %}}
+{{< /tabs >}}
+
+This command will follow the instructions in your `serverless.yml` template to create your Lambda functions and your Kinesis stream. 
+Note it may take a 1-2 minutes to execute.
 
 {{% notice style="note" %}}
 `serverless.yml` is in fact a CloudFormation template. CloudFormation is an infrastructure as code service from AWS. You can read more about it here - <https://aws.amazon.com/cloudformation/>
@@ -165,9 +205,13 @@ functions:
 
 Check the details of your serverless functions:
 
+{{< tabs >}}
+{{% tab name="Command" %}}
 ``` bash
 serverless info
 ```
+{{% /tab %}}
+{{< /tabs >}}
 
 Take note of your endpoint value:
 
