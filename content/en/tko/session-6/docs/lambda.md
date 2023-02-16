@@ -1,10 +1,10 @@
 ---
-title: Observability Lambda Lab
-linkTitle: Observability Lambda Lab
+title: Bulding a Distributed Trace
+linkTitle: Building a Distributed Trace
 weight: 99
 ---
 
-Welcome to Observability Lambda Lab. This lab will make a tracing superhero out of you! Follow the steps bellow to set up and get started.
+In this lab you will learn how to build a distributed trace. This lab will make a tracing superhero out of you! Follow the steps bellow to set up and get started.
 
 ## Pre-Requisites
 
@@ -22,7 +22,7 @@ You should see the directory `o11y-lambda-lab` in the list.
 *Note:* If you don't see the directory, fetch the contents of this repository by running the following command:
 
 ``` bash
-git clone -b master https://github.com/kdroukman/o11y-lambda-lab.git
+git clone https://github.com/kdroukman/o11y-lambda-lab.git
 ```
 
 In your Splunk Observability Cloud lab Organisation (Org) obtain your Access Token and Realm Values.
