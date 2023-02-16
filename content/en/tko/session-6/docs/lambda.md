@@ -619,10 +619,24 @@ Expand the **consumer-lambda** span. Can you find the attributes from your messa
 
 ![image](https://user-images.githubusercontent.com/5187861/219374303-d143515b-d1b1-46b4-bd03-0c4653ea08c0.png)
 
-## Conclusion
+# Before you Go
 
+Please kindly clean up your lab using the following command:
 
+{{< tabs >}}
+{{% tab name="Remove Functions" %}}
+``` bash
+sls remove
+```
+{{% /tab %}}
+{{< /tabs >}}
 
-Congratuations on finishing the lab. You can now built out a Trace manually by linking two different functions together. This is very powerful, when auto-instrumenation, or third-party systems do not support context propagation out of the box.
+# Conclusion
+
+Congratuations on finishing the lab. You have seen how we complement auto-instrumentation with manual steps to force **Producer** function's context to be sent to **Consumer** function via a Record put on a Kinesis stream. This allowed us to build the expected Distributed Trace.
+
+![image](https://user-images.githubusercontent.com/5187861/219375907-5a5e23ce-b9bb-4939-865d-7dbbaa668c53.png)
+
+You can now built out a Trace manually by linking two different functions together. This is very powerful when your auto-instrumenation, or third-party systems, do not support context propagation out of the box.
 
 
